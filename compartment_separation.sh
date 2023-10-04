@@ -1,5 +1,6 @@
 ##!/bin/bash
 echo "ATUL"
+echo "/opt/conda/envs/deepreg/bin/python"
 #export XNAT_USER=${2}
 #export XNAT_PASS=${3}
 #export XNAT_HOST=${4}
