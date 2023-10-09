@@ -4,11 +4,14 @@ echo "/opt/conda/envs/deepreg/bin/python"
 #export XNAT_USER=${2}
 #export XNAT_PASS=${3}
 #export XNAT_HOST=${4}
-#sessionID=${1}
-#working_dir=/workinginput
-#output_directory=/workingoutput
-#
-#final_output_directory=/outputinsidedocker
+sessionID=${1}
+working_dir=/workinginput
+output_directory=/workingoutput
+
+final_output_directory=/outputinsidedocker
+echo $(ls ${working_dir})
+echo $(ls ${output_directory})
+echo $(ls ${final_output_directory})
 #function call_get_resourcefiles_metadata_saveascsv_args() {
 #
 #  local resource_dir=${2}   #"NIFTI"
