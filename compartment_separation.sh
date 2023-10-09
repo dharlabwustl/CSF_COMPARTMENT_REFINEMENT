@@ -12,6 +12,7 @@ final_output_directory=/outputinsidedocker
 echo $(ls ${working_dir})
 echo $(ls ${output_directory})
 echo $(ls ${final_output_directory})
+echo $(ls /software/)
 #function call_get_resourcefiles_metadata_saveascsv_args() {
 #
 #  local resource_dir=${2}   #"NIFTI"
