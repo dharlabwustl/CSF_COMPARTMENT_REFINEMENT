@@ -14,7 +14,7 @@ echo "I am "
 if [[ ${TYPE_OF_PROGRAM} == 1 ]] ;
 then
 echo " I AM IN TYPE_OF_PROGRAM == 1"
-/software/compartment_separation.sh  $SESSION_ID $XNAT_USER $XNAT_PASS $XNAT_HOST
+/software/call_register_batch.sh  $SESSION_ID $XNAT_USER $XNAT_PASS $XNAT_HOST
 fi
 #
 #if [[ ${TYPE_OF_PROGRAM} == 2 ]] ;
