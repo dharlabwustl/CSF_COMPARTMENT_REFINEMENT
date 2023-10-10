@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import os, sys, errno, shutil, uuid,subprocess,csv,json
+sys.path.append('/storage1/fs1/dharr/Active/ATUL/PROJECTS/DeepReg/software')
 import math,inspect
 import glob
 import re,time
@@ -11,15 +12,57 @@ import numpy as np
 # import pydicom as dicom
 import pathlib
 import argparse
+
 from xnatSession import XnatSession
 catalogXmlRegex = re.compile(r'.*\.xml$')
 XNAT_HOST_URL='https://snipr.wustl.edu'
 XNAT_HOST = XNAT_HOST_URL # os.environ['XNAT_HOST'] #
-XNAT_USER = os.environ['XNAT_USER']#
-XNAT_PASS =os.environ['XNAT_PASS'] #
+XNAT_USER = 'atulkumar' #os.environ['XNAT_USER']#
+XNAT_PASS ='Mrityor1!' #os.environ['XNAT_PASS'] #
 
 
+def change_type_of_scan(sessionId, scanId,label):
+    returnvalue=0
+    try:
 
+        xnatSession = XnatSession(username=XNAT_USER, password=XNAT_PASS, host=XNAT_HOST)
+        url = ("/data/experiments/%s/scans/%s?xsiType=xnat:ctScanData&type=%s" % (sessionId, scanId, label))
+        xnatSession.renew_httpsession()
+        response = xnatSession.httpsess.put(xnatSession.host + url)
+        url = ("/data/experiments/%s/scans/%s?xsiType=xnat:ctScanData&quality=%s" % (sessionId, scanId, 'usable'))
+        xnatSession.renew_httpsession()
+        response1 = xnatSession.httpsess.put(xnatSession.host + url)
+        if response.status_code == 200 or response1.status_code == 200:
+            print("Successfully set type for %s scan %s to '%s'" % (sessionId, scanId, label))
+            print("Successfully set usability for %s scan %s to '%s'" % (sessionId, scanId, 'usable'))
+            command = "echo  success at : " +  inspect.stack()[0][3]  + " >> " + "/output/error.txt"
+            subprocess.call(command,shell=True)
+            returnvalue=1
+        # else:
+        #     errStr = "ERROR"
+        #     if response.status_code == 403 or response.status_code == 404:
+        #         errStr = "PERMISSION DENIED"
+        #     raise Exception("%s attempting to set series_class for %s %s to '%s': %s" %
+        #                     (errStr, sessionId, scanId, label, response.text))
+    except Exception:
+        command = "echo  failed at : " +  inspect.stack()[0][3]  + " >> " + "/output/error.txt"
+        subprocess.call(command,shell=True)
+        pass
+    return  returnvalue
+
+
+def call_change_type_of_scan(args):
+    returnvalue=0
+    try:
+        sessionId=args.stuff[1]
+        scanId=args.stuff[2]
+        label=args.stuff[3]
+        change_type_of_scan(sessionId, scanId,label)
+    except Exception:
+        command = "echo  failed at : " +  inspect.stack()[0][3]  + " >> " + "/output/error.txt"
+        subprocess.call(command,shell=True)
+        pass
+    return  returnvalue
 def merge_csvs(csvfileslist,columntomatchlist,outputfilename):
     df1=pd.read_csv(csvfileslist[0])
     left_on=columntomatchlist[0]
@@ -861,7 +904,7 @@ def get_resourcefiles_metadata(URI,resource_dir):
 def get_resourcefiles_metadata_saveascsv(URI,resource_dir,dir_to_receive_the_data,output_csvfile):
 
     url = (URI+'/resources/' + resource_dir +'/files?format=json')
-    print("url::{}".format(url))
+    # print("url::{}".format(url))
     xnatSession = XnatSession(username=XNAT_USER, password=XNAT_PASS, host=XNAT_HOST)
     xnatSession.renew_httpsession()
     response = xnatSession.httpsess.get(xnatSession.host + url)
@@ -1103,14 +1146,71 @@ def copy_nifti():
 def get_slice_idx(nDicomFiles):
     return min(nDicomFiles-1, math.ceil(nDicomFiles*0.7)) # slice 70% through the brain
 
-def get_metadata_session(sessionId):
+def get_metadata_session(sessionId,outputfile="NONE.csv"):
     url = ("/data/experiments/%s/scans/?format=json" %    (sessionId))
     xnatSession = XnatSession(username=XNAT_USER, password=XNAT_PASS, host=XNAT_HOST)
     xnatSession.renew_httpsession()
     response = xnatSession.httpsess.get(xnatSession.host + url)
     xnatSession.close_httpsession()
     metadata_session=response.json()['ResultSet']['Result']
+    metadata_session_1=json.dumps(metadata_session)
+    df_scan = pd.read_json(metadata_session_1)
+    df_scan.to_csv(outputfile,index=False)
     return metadata_session
+def get_session_label(sessionId,outputfile="NONE.csv"):
+    try:
+        xnatSession = XnatSession(username=XNAT_USER, password=XNAT_PASS, host=XNAT_HOST)
+        xnatSession.renew_httpsession()
+        # sessionId='SNIPR02_E02933'
+
+        url = ("/data/experiments/%s/?format=json" %    (sessionId)) #scans/
+        response = xnatSession.httpsess.get(xnatSession.host + url)
+        xnatSession.close_httpsession()
+        session_label=response.json()['items'][0]['data_fields']['label']
+        df_session=pd.DataFrame([session_label])
+        df_session.columns=['SESSION_LABEL']
+        df_session.to_csv(outputfile,index=False)
+        command="echo successful at :: {}::maskfilename::{} >> /software/error.txt".format(inspect.stack()[0][3],'get_session_label')
+        subprocess.call(command,shell=True)
+        returnvalue=session_label
+    except:
+        command="echo failed at :: {} >> /software/error.txt".format(inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+    return returnvalue
+def call_get_session_label(args):
+    returnvalue=0
+    try:
+        sessionId=args.stuff[1]
+        outputfile=args.stuff[2]
+        get_session_label(sessionId,outputfile=outputfile)
+        command="echo successful at :: {}::maskfilename::{} >> /software/error.txt".format(inspect.stack()[0][3],'call_get_metadata_session')
+        subprocess.call(command,shell=True)
+        returnvalue=1
+    except:
+        command="echo failed at :: {} >> /software/error.txt".format(inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+    return returnvalue
+
+def call_get_metadata_session(args):
+    returnvalue=0
+    try:
+        outpufilename=""
+        sessionId=args.stuff[1]
+        try:
+            outpufilename=args.stuff[2]
+        except:
+            pass
+        if len(outpufilename)>0:
+            get_metadata_session(sessionId,outpufilename)
+        else:
+            get_metadata_session(sessionId)
+        command="echo successful at :: {}::maskfilename::{} >> /software/error.txt".format(inspect.stack()[0][3],'call_get_metadata_session')
+        subprocess.call(command,shell=True)
+        returnvalue=1
+    except:
+        command="echo failed at :: {} >> /software/error.txt".format(inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+    return returnvalue
 def get_metadata_session_forbash():
     sessionId=sys.argv[1]
     url = ("/data/experiments/%s/scans/?format=json" %    (sessionId))
@@ -1673,8 +1773,12 @@ def main():
         return_value=call_uploadsinglefile_with_URI(args)
     if name_of_the_function=="call_download_a_singlefile_with_URIString":
         return_value=call_download_a_singlefile_with_URIString(args)
-        # print(return_value) call_get_resourcefiles_metadata_saveascsv
-        # return  call_concatenate_twocsv_list
+    if name_of_the_function=="call_change_type_of_scan":
+        return_value=call_change_type_of_scan(args)
+    if name_of_the_function=="call_get_metadata_session":
+        return_value=call_get_metadata_session(args)
+    if name_of_the_function=="call_get_session_label":
+        return_value=call_get_session_label(args)
     print(return_value)
 if __name__ == '__main__':
     main()
