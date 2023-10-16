@@ -119,84 +119,84 @@ def ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename):
         ventricle_mask_filename_nib=nib.load(ventricle_mask_filename)
         ventricle_mask_filename_nib_fdata=ventricle_mask_filename_nib.get_fdata()
         ventricle_mask_filename_nib_fdata_copy=np.copy(ventricle_mask_filename_nib_fdata)*0
-        for each_slice_num_z in range(ventricle_mask_filename_nib_fdata.shape[2]):
-            this_slice=ventricle_mask_filename_nib_fdata[:,:,each_slice_num_z]
-            non_zero_slices_x=[]
-            if np.sum(this_slice)>0:
-                for each_slice_num in range(this_slice.shape[0]):
-                    if np.sum(this_slice[each_slice_num,:]) > 0 :
-                        non_zero_slices_x.append(each_slice_num)
-                        command="echo slice num at :: {} >> error.txt".format(each_slice_num)
-                        subprocess.call(command,shell=True)
-                non_zero_slices_x_np=np.array(non_zero_slices_x)
-                print('non_zero_slices_np::{}'.format(non_zero_slices_x_np))
-
-                non_zero_slices_x_np_min=np.min(non_zero_slices_x_np)
-                non_zero_slices_x_np_max=np.max(non_zero_slices_x_np)
-
-                non_zero_slices_y=[]
-                for each_slice_num in range(this_slice.shape[1]):
-                    if np.sum(this_slice[:,each_slice_num]) > 0 :
-                        non_zero_slices_y.append(each_slice_num)
-                        command="echo slice num at :: {} >> error.txt".format(each_slice_num)
-                        subprocess.call(command,shell=True)
-                non_zero_slices_y_np=np.array(non_zero_slices_y)
-                print('non_zero_slices_np::{}'.format(non_zero_slices_y_np))
-
-                non_zero_slices_y_np_min=np.min(non_zero_slices_y_np)
-                non_zero_slices_y_np_max=np.max(non_zero_slices_y_np)
-                ventricle_mask_filename_nib_fdata_copy[non_zero_slices_x_np_min:non_zero_slices_x_np_max,non_zero_slices_y_np_min:non_zero_slices_y_np_max,each_slice_num_z]=1
-                
+        # for each_slice_num_z in range(ventricle_mask_filename_nib_fdata.shape[2]):
+        #     this_slice=ventricle_mask_filename_nib_fdata[:,:,each_slice_num_z]
+        #     non_zero_slices_x=[]
+        #     if np.sum(this_slice)>0:
+        #         for each_slice_num in range(this_slice.shape[0]):
+        #             if np.sum(this_slice[each_slice_num,:]) > 0 :
+        #                 non_zero_slices_x.append(each_slice_num)
+        #                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
+        #                 subprocess.call(command,shell=True)
+        #         non_zero_slices_x_np=np.array(non_zero_slices_x)
+        #         print('non_zero_slices_np::{}'.format(non_zero_slices_x_np))
+        #
+        #         non_zero_slices_x_np_min=np.min(non_zero_slices_x_np)
+        #         non_zero_slices_x_np_max=np.max(non_zero_slices_x_np)
+        #
+        #         non_zero_slices_y=[]
+        #         for each_slice_num in range(this_slice.shape[1]):
+        #             if np.sum(this_slice[:,each_slice_num]) > 0 :
+        #                 non_zero_slices_y.append(each_slice_num)
+        #                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
+        #                 subprocess.call(command,shell=True)
+        #         non_zero_slices_y_np=np.array(non_zero_slices_y)
+        #         print('non_zero_slices_np::{}'.format(non_zero_slices_y_np))
+        #
+        #         non_zero_slices_y_np_min=np.min(non_zero_slices_y_np)
+        #         non_zero_slices_y_np_max=np.max(non_zero_slices_y_np)
+        #         ventricle_mask_filename_nib_fdata_copy[non_zero_slices_x_np_min:non_zero_slices_x_np_max,non_zero_slices_y_np_min:non_zero_slices_y_np_max,each_slice_num_z]=1
+        #
                     
-            
-#         non_zero_slices=[]
-#         for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[2]):
-#             if np.sum(ventricle_mask_filename_nib_fdata[:,:,each_slice_num]) > 0 :
-#                 non_zero_slices.append(each_slice_num)
-#                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
-#                 subprocess.call(command,shell=True)
-#         non_zero_slices_np=np.array(non_zero_slices)
-#         print('non_zero_slices_np::{}'.format(non_zero_slices_np))
+    ###########################################################################################################
+        non_zero_slices=[]
+        for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[2]):
+            if np.sum(ventricle_mask_filename_nib_fdata[:,:,each_slice_num]) > 0 :
+                non_zero_slices.append(each_slice_num)
+                command="echo slice num at :: {} >> error.txt".format(each_slice_num)
+                subprocess.call(command,shell=True)
+        non_zero_slices_np=np.array(non_zero_slices)
+        print('non_zero_slices_np::{}'.format(non_zero_slices_np))
 
-#         ventricle_lowest_slice_num=np.min(non_zero_slices_np)
-#         ventricle_highest_slice_num=np.max(non_zero_slices_np)
-# ##################
-#         non_zero_slices_x=[]
-#         for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[0]):
-#             if np.sum(ventricle_mask_filename_nib_fdata[each_slice_num,:,:]) > 0 :
-#                 non_zero_slices_x.append(each_slice_num)
-#                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
-#                 subprocess.call(command,shell=True)
-#         non_zero_slices_x_np=np.array(non_zero_slices_x)
-#         print('non_zero_slices_x_np::{}'.format(non_zero_slices_x_np))
+        ventricle_lowest_slice_num=np.min(non_zero_slices_np)
+        ventricle_highest_slice_num=np.max(non_zero_slices_np)
+##################
+        non_zero_slices_x=[]
+        for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[0]):
+            if np.sum(ventricle_mask_filename_nib_fdata[each_slice_num,:,:]) > 0 :
+                non_zero_slices_x.append(each_slice_num)
+                command="echo slice num at :: {} >> error.txt".format(each_slice_num)
+                subprocess.call(command,shell=True)
+        non_zero_slices_x_np=np.array(non_zero_slices_x)
+        print('non_zero_slices_x_np::{}'.format(non_zero_slices_x_np))
 
-#         ventricle_lowest_slice_num_x=np.min(non_zero_slices_x_np)
-#         ventricle_highest_slice_num_x=np.max(non_zero_slices_x_np)
-# #####################
+        ventricle_lowest_slice_num_x=np.min(non_zero_slices_x_np)
+        ventricle_highest_slice_num_x=np.max(non_zero_slices_x_np)
+#####################
 
-# ##################
-#         non_zero_slices_y=[]
-#         for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[0]):
-#             if np.sum(ventricle_mask_filename_nib_fdata[:,each_slice_num,:]) > 0 :
-#                 non_zero_slices_y.append(each_slice_num)
-#                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
-#                 subprocess.call(command,shell=True)
-#         non_zero_slices_y_np=np.array(non_zero_slices_y)
-#         print('non_zero_slices_y_np::{}'.format(non_zero_slices_y_np))
+##################
+        non_zero_slices_y=[]
+        for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[0]):
+            if np.sum(ventricle_mask_filename_nib_fdata[:,each_slice_num,:]) > 0 :
+                non_zero_slices_y.append(each_slice_num)
+                command="echo slice num at :: {} >> error.txt".format(each_slice_num)
+                subprocess.call(command,shell=True)
+        non_zero_slices_y_np=np.array(non_zero_slices_y)
+        print('non_zero_slices_y_np::{}'.format(non_zero_slices_y_np))
 
-#         ventricle_lowest_slice_num_y=np.min(non_zero_slices_y_np)
-#         ventricle_highest_slice_num_y=np.max(non_zero_slices_y_np)
-# #####################
-#         ventricle_extent_vertical = pd.DataFrame(columns=['Lowest','Highest'])
-#         ventricle_extent_vertical.loc[0] = [ventricle_lowest_slice_num,ventricle_highest_slice_num]
-#         ventricle_extent_vertical.loc[1] = [ventricle_lowest_slice_num_x,ventricle_highest_slice_num_x]
-#         ventricle_extent_vertical.loc[2] = [ventricle_lowest_slice_num_y,ventricle_highest_slice_num_y]
-# #         ventricle_extent_vertical=pd.DataFrame(np.array([ventricle_lowest_slice_num,ventricle_highest_slice_num]))
-# #         ventricle_extent_vertical.columns=
-#         ventricle_extent_vertical.to_csv(outputfilename,index=False)
-#         command="echo successful at :: {} >> error.txt".format(inspect.stack()[0][3])
-#         subprocess.call(command,shell=True)
-#         ventricle_mask_filename_nib_fdata_copy[ventricle_lowest_slice_num_x:ventricle_highest_slice_num_x,ventricle_lowest_slice_num_y:ventricle_highest_slice_num_y,ventricle_lowest_slice_num:ventricle_highest_slice_num]=1
+        ventricle_lowest_slice_num_y=np.min(non_zero_slices_y_np)
+        ventricle_highest_slice_num_y=np.max(non_zero_slices_y_np)
+#####################
+        ventricle_extent_vertical = pd.DataFrame(columns=['Lowest','Highest'])
+        ventricle_extent_vertical.loc[0] = [ventricle_lowest_slice_num,ventricle_highest_slice_num]
+        ventricle_extent_vertical.loc[1] = [ventricle_lowest_slice_num_x,ventricle_highest_slice_num_x]
+        ventricle_extent_vertical.loc[2] = [ventricle_lowest_slice_num_y,ventricle_highest_slice_num_y]
+#         ventricle_extent_vertical=pd.DataFrame(np.array([ventricle_lowest_slice_num,ventricle_highest_slice_num]))
+#         ventricle_extent_vertical.columns=
+        ventricle_extent_vertical.to_csv(outputfilename,index=False)
+        command="echo successful at :: {} >> error.txt".format(inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+        ventricle_mask_filename_nib_fdata_copy[ventricle_lowest_slice_num_x:ventricle_highest_slice_num_x,ventricle_lowest_slice_num_y:ventricle_highest_slice_num_y,ventricle_lowest_slice_num:ventricle_highest_slice_num]=1
         array_mask = nib.Nifti1Image(ventricle_mask_filename_nib_fdata_copy, affine=ventricle_mask_filename_nib.affine, header=ventricle_mask_filename_nib.header)
         mirror_image_mask_filename=outputfilename #ventricle_mask_filename.split('.nii')[0]+'_bounding_box.nii.gz'
         # niigzfilenametosave2=os.path.join(OUTPUT_DIRECTORY,os.path.basename(levelset_file)) #.split(".nii")[0]+"RESIZED.nii.gz")
