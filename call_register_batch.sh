@@ -826,7 +826,16 @@ while IFS=',' read -ra array; do
         echo "${csffile}"
               echo url2::${url2}
       fi
-
+      if [[ ${url2} == *"_resaved_csf_unet.nii.gz"* ]]; then #  || [[ ${url2} == *"_levelset_bet"* ]]  || [[ ${url2} == *"csf_unet"* ]]  ; then ##[[ $string == *"My long"* ]]; then
+        echo "It's there!"
+        echo "${array2[6]}"
+        filename2=$(basename ${url2})
+        call_download_a_singlefile_with_URIString_arguments=('call_download_a_singlefile_with_URIString' ${url2} ${filename2} ${dir_to_save})
+        outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
+        csffile_complete=${dir_to_save}/${filename2}
+        echo "${csffile_complete}"
+              echo url2::${url2}
+      fi
 
     done < <(tail -n +2 "${working_dir}/${output_csvfile_1}")
             while IFS=',' read -ra array2; do
@@ -893,7 +902,7 @@ outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${ca
 outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_copy_im_parameter_to_a_matrix_nifti_arguments[@]}")
     
     
-    call_first_rotation_image_arguments=('call_first_rotation_image' ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}_mirror.nii.gz)
+    call_first_rotation_image_arguments=('call_first_rotation_image' ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}_mirror.nii.gz ${csffile_complete})
 outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_first_rotation_image_arguments[@]}")
 
 bounding_box_each_filename=${transformed_ventricle%.nii*}'_mirror_bounding_box.nii.gz'
