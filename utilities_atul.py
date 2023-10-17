@@ -343,12 +343,13 @@ def rotate_reverse_image(niftifilename,originalfilename,npyfiledirectory,mirror_
     return  returnvalue    
 
 
-def first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filename): #niftifilename,npyfiledirectory,niftifilenamedir):
+def first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filename,csffile_complete): #niftifilename,npyfiledirectory,niftifilenamedir):
     returnvalue=0
     try:    
         grayfilename_base=os.path.basename(niftifilename) 
         grayfilename=niftifilename 
         npyfileextension="REGISMethodOriginalRF_midline.npy"
+        csffile_complete_nib=nib.load(csffile_complete)
         niftifilename_nib=nib.load(niftifilename)
         filename_gray_data_np=resizeinto_512by512(niftifilename_nib.get_fdata()) 
         filename_gray_data_np_copy=np.copy(filename_gray_data_np)
@@ -435,7 +436,9 @@ def first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filena
 #                     output_mask_file_np[:,:,img_idx][output_mask_file_np[:,:,img_idx]>0]=1
 #                     output_mask_file_np[:,:,img_idx][output_mask_file_np[:,:,img_idx]<1]=0
 
-        array_mask = nib.Nifti1Image(output_mask_file_np, affine=niftifilename_nib.affine, header=niftifilename_nib.header)
+        # array_mask = nib.Nifti1Image(output_mask_file_np, affine=niftifilename_nib.affine, header=niftifilename_nib.header)
+        array_mask = nib.Nifti1Image(output_mask_file_np, affine=csffile_complete_nib.affine, header=csffile_complete_nib.header)
+
         # niigzfilenametosave2=os.path.join(OUTPUT_DIRECTORY,os.path.basename(levelset_file)) #.split(".nii")[0]+"RESIZED.nii.gz")
         nib.save(array_mask, mirror_image_mask_filename)
         command="echo successful at :: {} ::ventricle_mask_filename::  {} >> error.txt".format(inspect.stack()[0][3],inspect.stack()[0][3])
@@ -477,7 +480,8 @@ def call_first_rotation_image(args):
         niftifilename=args.stuff[1]
         npyfiledirectory=args.stuff[2]
         mirror_image_mask_filename=args.stuff[3]
-        first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filename)
+        csffile_complete=args.stuff[4]
+        first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filename,csffile_complete)
         command="echo successful at :: {} ::ventricle_mask_filename::  {} >> error.txt".format(inspect.stack()[0][3],inspect.stack()[0][3])
         subprocess.call(command,shell=True)
         returnvalue=1
