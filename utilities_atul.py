@@ -163,7 +163,7 @@ def ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename):
 ##################
         non_zero_slices_x=[]
         for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[0]):
-            if np.sum(ventricle_mask_filename_nib_fdata[each_slice_num,:,:]) > 0 :
+            if np.sum(ventricle_mask_filename_nib_fdata[each_slice_num,:,:]) > -1000 :
                 non_zero_slices_x.append(each_slice_num)
                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
                 subprocess.call(command,shell=True)
@@ -177,7 +177,7 @@ def ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename):
 ##################
         non_zero_slices_y=[]
         for each_slice_num in range(ventricle_mask_filename_nib_fdata.shape[0]):
-            if np.sum(ventricle_mask_filename_nib_fdata[:,each_slice_num,:]) > 0 :
+            if np.sum(ventricle_mask_filename_nib_fdata[:,each_slice_num,:]) > -1000 :
                 non_zero_slices_y.append(each_slice_num)
                 command="echo slice num at :: {} >> error.txt".format(each_slice_num)
                 subprocess.call(command,shell=True)
