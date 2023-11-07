@@ -897,6 +897,10 @@ transformed_ventricle=${non_rigid_regis_mask_output_dir}/${file_prefix}"_T_APPLI
 output_filename=$(dirname $transformed_ventricle)/'ventricle_extent.csv'
 call_vertical_extent_ventricle_arguments=('call_vertical_extent_ventricle' ${transformed_ventricle} ${output_filename})
 outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_vertical_extent_ventricle_arguments[@]}")
+resource_dirname="MASKS"
+call_uploadsinglefile_with_URI_arguments=('call_uploadsinglefile_with_URI' ${URI_1} ${output_filename} ${resource_dirname})
+outputfiles_present=$(/opt/conda/envs/deepreg/bin/python /software/download_with_session_ID.py "${call_uploadsinglefile_with_URI_arguments[@]}")
+
 
 #call_copy_im_parameter_to_a_matrix_nifti_arguments=('call_copy_im_parameter_to_a_matrix_nifti' ${transformed_ventricle} ${grayfilename} ${transformed_ventricle})
 #outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_copy_im_parameter_to_a_matrix_nifti_arguments[@]}")
@@ -917,10 +921,10 @@ outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${ca
 #outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_rotate_reverse_image_arguments[@]}")
 #
 #resource_dirname="MASKS"
-#
-## for nifti_reg_filename in ${output_directory}/*_lin1_1.nii.gz; do
-#  call_uploadsinglefile_with_URI_arguments=('call_uploadsinglefile_with_URI' ${URI_1} ${transformed_ventricle%.nii*}'_mirror_bounding_box_inv_r_t.nii.gz' ${resource_dirname})
-#  outputfiles_present=$(/opt/conda/envs/deepreg/bin/python /software/download_with_session_ID.py "${call_uploadsinglefile_with_URI_arguments[@]}")
+
+# for nifti_reg_filename in ${output_directory}/*_lin1_1.nii.gz; do
+#call_uploadsinglefile_with_URI_arguments=('call_uploadsinglefile_with_URI' ${URI_1} ${transformed_ventricle%.nii*}'_mirror_bounding_box_inv_r_t.nii.gz' ${resource_dirname})
+#outputfiles_present=$(/opt/conda/envs/deepreg/bin/python /software/download_with_session_ID.py "${call_uploadsinglefile_with_URI_arguments[@]}")
 
   done \
     < <(tail -n +2 "${dir_to_save}/${filename}")
