@@ -196,7 +196,8 @@ def ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename):
         ventricle_extent_vertical.to_csv(outputfilename,index=False)
         command="echo successful at :: {} >> error.txt".format(inspect.stack()[0][3])
         subprocess.call(command,shell=True)
-        ventricle_mask_filename_nib_fdata_copy[ventricle_lowest_slice_num_x:ventricle_highest_slice_num_x,ventricle_lowest_slice_num_y:ventricle_highest_slice_num_y,ventricle_lowest_slice_num:ventricle_highest_slice_num]=1
+        # ventricle_mask_filename_nib_fdata_copy[ventricle_lowest_slice_num_x:ventricle_highest_slice_num_x,ventricle_lowest_slice_num_y:ventricle_highest_slice_num_y,ventricle_lowest_slice_num:ventricle_highest_slice_num]=1
+        ventricle_mask_filename_nib_fdata_copy[:,:,ventricle_lowest_slice_num:ventricle_highest_slice_num]=1
         array_mask = nib.Nifti1Image(ventricle_mask_filename_nib_fdata_copy, affine=ventricle_mask_filename_nib.affine, header=ventricle_mask_filename_nib.header)
         mirror_image_mask_filename=outputfilename #ventricle_mask_filename.split('.nii')[0]+'_bounding_box.nii.gz'
         # niigzfilenametosave2=os.path.join(OUTPUT_DIRECTORY,os.path.basename(levelset_file)) #.split(".nii")[0]+"RESIZED.nii.gz")
@@ -475,6 +476,21 @@ def call_copy_im_parameter_to_a_matrix_nifti(args):
     return  returnvalue
 
 def call_first_rotation_image(args):
+    returnvalue=0
+    try:
+        niftifilename=args.stuff[1]
+        npyfiledirectory=args.stuff[2]
+        mirror_image_mask_filename=args.stuff[3]
+        csffile_complete=args.stuff[4]
+        first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filename,csffile_complete)
+        command="echo successful at :: {} ::ventricle_mask_filename::  {} >> error.txt".format(inspect.stack()[0][3],inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+        returnvalue=1
+    except:
+        command="echo failed at :: {} >> error.txt".format(inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+    return  returnvalue
+def vertical_extent_ventricle(args):
     returnvalue=0
     try:
         niftifilename=args.stuff[1]
