@@ -114,7 +114,7 @@ def call_createh5file(args):
         subprocess.call(command,shell=True)
     return  returnvalue
     
-def ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename):
+def ventricle_boundingbox_zaxis(ventricle_mask_filename,outputfilename):
     try:
         ventricle_mask_filename_nib=nib.load(ventricle_mask_filename)
         ventricle_mask_filename_nib_fdata=ventricle_mask_filename_nib.get_fdata()
@@ -209,12 +209,12 @@ def ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename):
     # print(returnvalue)
     return  returnvalue
 
-def call_ventricle_boundingbox_each_slice(args):
+def call_ventricle_boundingbox_zaxis(args):
     returnvalue=0
     try:
         ventricle_mask_filename=args.stuff[1]
         outputfilename=args.stuff[2]
-        ventricle_boundingbox_each_slice(ventricle_mask_filename,outputfilename)
+        ventricle_boundingbox_zaxis(ventricle_mask_filename,outputfilename)
         command="echo successful at :: {} ::ventricle_mask_filename::  {} >> error.txt".format(inspect.stack()[0][3],ventricle_mask_filename)
         subprocess.call(command,shell=True)
         returnvalue=1
@@ -444,10 +444,10 @@ def first_rotation_image(niftifilename,npyfiledirectory,mirror_image_mask_filena
         nib.save(array_mask, mirror_image_mask_filename)
         command="echo successful at :: {} ::ventricle_mask_filename::  {} >> error.txt".format(inspect.stack()[0][3],inspect.stack()[0][3])
         subprocess.call(command,shell=True)
-#         ventricle_boundingbox_each_slice(mirror_image_mask_filename,mirror_image_mask_filename.split(".nii")[0]+"_extent_reverse_rot_n_t.csv")
+#         ventricle_boundingbox_zaxis(mirror_image_mask_filename,mirror_image_mask_filename.split(".nii")[0]+"_extent_reverse_rot_n_t.csv")
 #         originalfilename=niftifilename
 #         rotate_reverse_image(mirror_image_mask_filename.split('.nii')[0]+'_bounding_box.nii.gz',originalfilename,npyfiledirectory,mirror_image_mask_filename.split('nii')[0]+'_bounding_box_inv_r_t.nii.gz')
-#         ventricle_boundingbox_each_slice(mirror_image_mask_filename,mirror_image_mask_filename.split(".nii")[0]+"_extent_reverse_rot_n_t.csv")
+#         ventricle_boundingbox_zaxis(mirror_image_mask_filename,mirror_image_mask_filename.split(".nii")[0]+"_extent_reverse_rot_n_t.csv")
         returnvalue=1
     except:
         command="echo failed at :: {} >> error.txt".format(inspect.stack()[0][3])
@@ -511,8 +511,8 @@ def main():
     args = parser.parse_args()
     name_of_the_function=args.stuff[0]
     return_value=0
-    if name_of_the_function == "call_ventricle_boundingbox_each_slice":
-        return_value=call_ventricle_boundingbox_each_slice(args) 
+    if name_of_the_function == "call_ventricle_boundingbox_zaxis":
+        return_value=call_ventricle_boundingbox_zaxis(args) 
     if name_of_the_function == "call_createh5file": 
         return_value=call_createh5file(args)        
     if name_of_the_function == "call_gray2binary": 

@@ -906,8 +906,8 @@ outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${ca
 outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_first_rotation_image_arguments[@]}")
 
 bounding_box_each_filename=${transformed_ventricle%.nii*}'_mirror_bounding_box.nii.gz'
-call_ventricle_boundingbox_each_slice_arguments=('call_ventricle_boundingbox_each_slice' ${transformed_ventricle%.nii*}_mirror.nii.gz ${bounding_box_each_filename} )
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_each_slice_arguments[@]}")
+call_ventricle_boundingbox_zaxis_arguments=('call_ventricle_boundingbox_zaxis' ${transformed_ventricle%.nii*}_mirror.nii.gz ${bounding_box_each_filename} )
+outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_zaxis_arguments[@]}")
 
 # niftifilename=args.stuff[1]
 # originalfilename=args.stuff[2]
