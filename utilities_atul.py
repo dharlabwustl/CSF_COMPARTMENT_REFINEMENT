@@ -239,6 +239,25 @@ def call_rotate_reverse_image(args):
         subprocess.call(command,shell=True)
     # print(returnvalue)
     return  returnvalue
+
+def resize_nifti_into_512by512(args):
+    returnvalue=0
+    try:
+        niftifilename=args.stuff[1]
+        niftifilename_output=args.stuff[2]
+        niftifilename_nib=nib.load(niftifilename)
+        filename_gray_data_np=resizeinto_512by512(niftifilename_nib.get_fdata())
+        array_mask = nib.Nifti1Image(filename_gray_data_np, affine=niftifilename_nib.affine, header=niftifilename_nib.header)
+        nib.save(array_mask, niftifilename_output)
+        command="echo successful at :: {} ::ventricle_mask_filename::  {} >> error.txt".format(inspect.stack()[0][3],inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+        returnvalue=1
+    except:
+        command="echo failed at :: {} >> error.txt".format(inspect.stack()[0][3])
+        subprocess.call(command,shell=True)
+        # print(returnvalue)
+    return  returnvalue
+
 def rotate_reverse_image(niftifilename,originalfilename,npyfiledirectory,mirror_image_mask_filename): #niftifilename,npyfiledirectory,niftifilenamedir):
     returnvalue=0
     try:    
@@ -522,7 +541,10 @@ def main():
     if name_of_the_function == "call_copy_im_parameter_to_a_matrix_nifti": 
         return_value=call_copy_im_parameter_to_a_matrix_nifti(args)   
     if name_of_the_function == "call_rotate_reverse_image": 
-        return_value=call_rotate_reverse_image(args)        
+        return_value=call_rotate_reverse_image(args)
+    if "call" not in name_of_the_function:
+        return_value=0
+    globals()[args.stuff[0]](args)
     return return_value
 if __name__ == '__main__':
     main()
