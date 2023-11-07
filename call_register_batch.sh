@@ -905,7 +905,7 @@ outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${ca
 #call_first_rotation_image_arguments=('call_first_rotation_image' ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}_mirror.nii.gz ${csffile_complete})
 #outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_first_rotation_image_arguments[@]}")
 
-bounding_box_each_filename=${transformed_ventricle%.nii*}'_mirror_bounding_box.nii.gz'
+bounding_box_each_filename=${transformed_ventricle%.nii*}'_vertical_bounding_box_512x512.nii.gz'
 call_ventricle_boundingbox_zaxis_arguments=('call_ventricle_boundingbox_zaxis' ${transformed_ventricle}  ${bounding_box_each_filename} ) ##%.nii*}_mirror.nii.gz
 outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_zaxis_arguments[@]}")
 
