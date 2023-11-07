@@ -784,17 +784,14 @@ while IFS=',' read -ra array; do
     resource_dir="MASKS"
     output_csvfile_1=${sessionID}_MASK_METADATA.csv
     call_get_resourcefiles_metadata_saveascsv_args ${url1} ${resource_dir} ${working_dir} ${output_csvfile_1}
-    
-        resource_dir="MIDLINE_NPY"
+
+    resource_dir="MIDLINE_NPY"
     output_csvfile_MIDLINE_NPY=${sessionID}_MIDLINE_NPY_METADATA.csv
     call_get_resourcefiles_metadata_saveascsv_args ${url1} ${resource_dir} ${working_dir} ${output_csvfile_MIDLINE_NPY}
-
-
 
     while IFS=',' read -ra array2; do
       url2=${array2[6]}
       #################
-
 
       if [[ ${url2} == *"_brain_fscct_strippedResampled1lin1_1.nii.gz"* ]]; then #  || [[ ${url2} == *"_levelset_bet"* ]]  || [[ ${url2} == *"csf_unet"* ]]  ; then ##[[ $string == *"My long"* ]]; then
         echo "It's there!"
@@ -804,7 +801,7 @@ while IFS=',' read -ra array; do
         outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
         greyfile=${dir_to_save}/${filename2}
         echo "${greyfile}"
-              echo url2::${url2}
+        echo url2::${url2}
       fi
       if [[ ${url2} == *"_levelset_brain_f.nii.gz"* ]]; then #  || [[ ${url2} == *"_levelset_bet"* ]]  || [[ ${url2} == *"csf_unet"* ]]  ; then ##[[ $string == *"My long"* ]]; then
         echo "It's there!"
@@ -814,7 +811,7 @@ while IFS=',' read -ra array; do
         outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
         betfile=${dir_to_save}/${filename2}
         echo "${betfile}"
-              echo url2::${url2}
+        echo url2::${url2}
       fi
       if [[ ${url2} == *"_levelset_brain_fscct_strippedResampled1_onlyventricle_lin1_1.nii.gz"* ]]; then #  || [[ ${url2} == *"_levelset_bet"* ]]  || [[ ${url2} == *"csf_unet"* ]]  ; then ##[[ $string == *"My long"* ]]; then
         echo "It's there!"
@@ -824,7 +821,7 @@ while IFS=',' read -ra array; do
         outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
         csffile=${dir_to_save}/${filename2}
         echo "${csffile}"
-              echo url2::${url2}
+        echo url2::${url2}
       fi
       if [[ ${url2} == *"_resaved_csf_unet.nii.gz"* ]]; then #  || [[ ${url2} == *"_levelset_bet"* ]]  || [[ ${url2} == *"csf_unet"* ]]  ; then ##[[ $string == *"My long"* ]]; then
         echo "It's there!"
@@ -834,24 +831,24 @@ while IFS=',' read -ra array; do
         outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
         csffile_complete=${dir_to_save}/${filename2}
         echo "${csffile_complete}"
-              echo url2::${url2}
+        echo url2::${url2}
       fi
 
     done < <(tail -n +2 "${working_dir}/${output_csvfile_1}")
-            while IFS=',' read -ra array2; do
+    while IFS=',' read -ra array2; do
       url2=${array2[6]}
 
-        echo "It's there!"
-        echo "${array2[6]}"
-        filename2=$(basename ${url2})
-        call_download_a_singlefile_with_URIString_arguments=('call_download_a_singlefile_with_URIString' ${url2} ${filename2} ${working_dir_1})
-        outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
-        greyfile=${dir_to_save}/${filename2}
-        echo "${greyfile}"
-              echo url2::${url2}
+      echo "It's there!"
+      echo "${array2[6]}"
+      filename2=$(basename ${url2})
+      call_download_a_singlefile_with_URIString_arguments=('call_download_a_singlefile_with_URIString' ${url2} ${filename2} ${working_dir_1})
+      outputfiles_present=$(/opt/conda/envs/deepreg/bin/python download_with_session_ID.py "${call_download_a_singlefile_with_URIString_arguments[@]}")
+      greyfile=${dir_to_save}/${filename2}
+      echo "${greyfile}"
+      echo url2::${url2}
 
-        done < <(tail -n +2 "${working_dir}/${output_csvfile_MIDLINE_NPY}")
-    
+    done < <(tail -n +2 "${working_dir}/${output_csvfile_MIDLINE_NPY}")
+
     directory_name=${working_dir} ##'/storage1/fs1/dharr/Active/ATUL/PROJECTS/DeepReg/DATA/SAH_1_01052014_2003_2'
     rm ${directory_name}/*.h5
     rm -r ${directory_name}/log_test1
@@ -860,69 +857,68 @@ while IFS=',' read -ra array; do
     echo file_prefix:${file_prefix}
     output_directory="log_test1"
     template_gray_file_transformed=${directory_name}/${file_prefix}'_resaved_levelset_brain_fscct_strippedResampled1lin1_1.nii.gz'
-    template_gray_file_transformed_mask=${template_gray_file_transformed%.nii*}_BET.nii.gz 
+    template_gray_file_transformed_mask=${template_gray_file_transformed%.nii*}_BET.nii.gz
     ## creating BETs
-    call_gray2binary_arguments=('call_gray2binary' ${template_gray_file_transformed}  ${template_gray_file_transformed_mask}  )
+    call_gray2binary_arguments=('call_gray2binary' ${template_gray_file_transformed} ${template_gray_file_transformed_mask})
     outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_gray2binary_arguments[@]}")
-    
+
     grayfilename=${directory_name}/${file_prefix}'_resaved_levelset_brain_f.nii.gz'
-    grayfilename_mask=${grayfilename%.nii*}_BET.nii.gz 
-    call_gray2binary_arguments=('call_gray2binary' ${grayfilename} ${grayfilename_mask}  )
+    grayfilename_mask=${grayfilename%.nii*}_BET.nii.gz
+    call_gray2binary_arguments=('call_gray2binary' ${grayfilename} ${grayfilename_mask})
     outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_gray2binary_arguments[@]}")
     h5data_output_dir=${directory_name} ##$(dirname ${grayfilename})
     # create h5 file for deepreg
-    call_createh5file_arguments=('call_createh5file' ${template_gray_file_transformed} ${grayfilename} ${template_gray_file_transformed_mask} ${grayfilename_mask} ${h5data_output_dir} )
+    call_createh5file_arguments=('call_createh5file' ${template_gray_file_transformed} ${grayfilename} ${template_gray_file_transformed_mask} ${grayfilename_mask} ${h5data_output_dir})
     outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_createh5file_arguments[@]}")
-    
+
     #####################################################
     template_gray_ventricle_file_transformed=${directory_name}/${file_prefix}'_resaved_levelset_brain_fscct_strippedResampled1_onlyventricle_lin1_1.nii.gz'
-template_mask_ventricle_file_transformed_mask=${directory_name}/${file_prefix}'_resaved_levelset_brain_fscct_strippedResampled1_onlyventricle_lin1_1_BET.nii.gz'
-    call_gray2binary_arguments=('call_gray2binary' ${template_gray_ventricle_file_transformed}  ${template_mask_ventricle_file_transformed_mask}  )
+    template_mask_ventricle_file_transformed_mask=${directory_name}/${file_prefix}'_resaved_levelset_brain_fscct_strippedResampled1_onlyventricle_lin1_1_BET.nii.gz'
+    call_gray2binary_arguments=('call_gray2binary' ${template_gray_ventricle_file_transformed} ${template_mask_ventricle_file_transformed_mask})
     outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_gray2binary_arguments[@]}")
-call_createh5file_arguments=('call_createh5file' ${template_gray_ventricle_file_transformed} ${grayfilename} ${template_mask_ventricle_file_transformed_mask} ${grayfilename_mask} ${h5data_output_dir} )
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_createh5file_arguments[@]}")
-## Register
-template_gray_filename_h5=${directory_name}/${file_prefix}"_resaved_levelset_brain_fscct_strippedResampled1lin1_1_h5data.h5"
-non_rigid_regis_output_dir=${directory_name}"/${output_directory}"
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python register_batch_Sep26_2023.py  ${template_gray_filename_h5} ${non_rigid_regis_output_dir} ) ###"${call_register_template_to_a_ct_arguments[@]}")
-#####################
-## transform the required nifti file based on the registration ddf file
-h5file_containing_data_tobe_transformed=${directory_name}/${file_prefix}'_resaved_levelset_brain_fscct_strippedResampled1_onlyventricle_lin1_1_h5data.h5'
-non_rigid_regis_mask_output_dir=${directory_name}/${output_directory}_1
-ddffile=${non_rigid_regis_output_dir}/${file_prefix}_ddf.nii.gz
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python transform_with_ddf.py  ${h5file_containing_data_tobe_transformed} ${ddffile} ${non_rigid_regis_mask_output_dir} )
-    
+    call_createh5file_arguments=('call_createh5file' ${template_gray_ventricle_file_transformed} ${grayfilename} ${template_mask_ventricle_file_transformed_mask} ${grayfilename_mask} ${h5data_output_dir})
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_createh5file_arguments[@]}")
+    ## Register
+    template_gray_filename_h5=${directory_name}/${file_prefix}"_resaved_levelset_brain_fscct_strippedResampled1lin1_1_h5data.h5"
+    non_rigid_regis_output_dir=${directory_name}"/${output_directory}"
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python register_batch_Sep26_2023.py ${template_gray_filename_h5} ${non_rigid_regis_output_dir}) ###"${call_register_template_to_a_ct_arguments[@]}")
+    #####################
+    ## transform the required nifti file based on the registration ddf file
+    h5file_containing_data_tobe_transformed=${directory_name}/${file_prefix}'_resaved_levelset_brain_fscct_strippedResampled1_onlyventricle_lin1_1_h5data.h5'
+    non_rigid_regis_mask_output_dir=${directory_name}/${output_directory}_1
+    ddffile=${non_rigid_regis_output_dir}/${file_prefix}_ddf.nii.gz
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python transform_with_ddf.py ${h5file_containing_data_tobe_transformed} ${ddffile} ${non_rigid_regis_mask_output_dir})
+
     ## get the vertical extent:
-transformed_ventricle=${non_rigid_regis_mask_output_dir}/${file_prefix}"_T_APPLIED_warped_moving_label.nii.gz"
-#output_filename=$(dirname $transformed_ventricle)/'ventricle_extent.csv'
-#call_vertical_extent_ventricle_arguments=('call_vertical_extent_ventricle' ${transformed_ventricle} ${output_filename})
-#outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_vertical_extent_ventricle_arguments[@]}")
+    transformed_ventricle=${non_rigid_regis_mask_output_dir}/${file_prefix}"_T_APPLIED_warped_moving_label.nii.gz"
+    #output_filename=$(dirname $transformed_ventricle)/'ventricle_extent.csv'
+    #call_vertical_extent_ventricle_arguments=('call_vertical_extent_ventricle' ${transformed_ventricle} ${output_filename})
+    #outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_vertical_extent_ventricle_arguments[@]}")
 
-call_copy_im_parameter_to_a_matrix_nifti_arguments=('call_copy_im_parameter_to_a_matrix_nifti' ${transformed_ventricle} ${grayfilename} ${transformed_ventricle})
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_copy_im_parameter_to_a_matrix_nifti_arguments[@]}")
+    call_copy_im_parameter_to_a_matrix_nifti_arguments=('call_copy_im_parameter_to_a_matrix_nifti' ${transformed_ventricle} ${grayfilename} ${transformed_ventricle})
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_copy_im_parameter_to_a_matrix_nifti_arguments[@]}")
 
+    #call_first_rotation_image_arguments=('call_first_rotation_image' ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}_mirror.nii.gz ${csffile_complete})
+    #outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_first_rotation_image_arguments[@]}")
 
-#call_first_rotation_image_arguments=('call_first_rotation_image' ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}_mirror.nii.gz ${csffile_complete})
-#outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_first_rotation_image_arguments[@]}")
+    bounding_box_each_filename=${transformed_ventricle%.nii*}'_vertical_bounding_box_512x512.nii.gz'
+    call_ventricle_boundingbox_zaxis_arguments=('call_ventricle_boundingbox_zaxis' ${transformed_ventricle} ${bounding_box_each_filename}) ##%.nii*}_mirror.nii.gz
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_zaxis_arguments[@]}")
 
-bounding_box_each_filename=${transformed_ventricle%.nii*}'_vertical_bounding_box_512x512.nii.gz'
-call_ventricle_boundingbox_zaxis_arguments=('call_ventricle_boundingbox_zaxis' ${transformed_ventricle}  ${bounding_box_each_filename} ) ##%.nii*}_mirror.nii.gz
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_zaxis_arguments[@]}")
+    call_ventricle_boundingbox_zaxis_arguments=('resize_nifti_into_512by512' ${bounding_box_each_filename} ${bounding_box_each_filename})
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_zaxis_arguments[@]}")
+    # niftifilename=args.stuff[1]
+    # originalfilename=args.stuff[2]
+    # npyfiledirectory=args.stuff[3]
+    # mirror_image_mask_filename=args.stuff[4]
+    #call_rotate_reverse_image_arguments=('call_rotate_reverse_image' ${bounding_box_each_filename} ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}'_mirror_bounding_box_inv_r_t.nii.gz' )
+    #outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_rotate_reverse_image_arguments[@]}")
 
-call_ventricle_boundingbox_zaxis_arguments=('resize_nifti_into_512by512'  ${bounding_box_each_filename} ${bounding_box_each_filename} )
-outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_ventricle_boundingbox_zaxis_arguments[@]}")
-# niftifilename=args.stuff[1]
-# originalfilename=args.stuff[2]
-# npyfiledirectory=args.stuff[3]
-# mirror_image_mask_filename=args.stuff[4]
-#call_rotate_reverse_image_arguments=('call_rotate_reverse_image' ${bounding_box_each_filename} ${transformed_ventricle} ${working_dir_1} ${transformed_ventricle%.nii*}'_mirror_bounding_box_inv_r_t.nii.gz' )
-#outputfiles_present=$(/opt/conda/envs/deepreg/bin/python utilities_atul.py "${call_rotate_reverse_image_arguments[@]}")
+    resource_dirname="MASKS"
 
-resource_dirname="MASKS"
-
-# for nifti_reg_filename in ${output_directory}/*_lin1_1.nii.gz; do
-  call_uploadsinglefile_with_URI_arguments=('call_uploadsinglefile_with_URI' ${URI_1} ${bounding_box_each_filename} ${resource_dirname})
-  outputfiles_present=$(/opt/conda/envs/deepreg/bin/python /software/download_with_session_ID.py "${call_uploadsinglefile_with_URI_arguments[@]}")
+    # for nifti_reg_filename in ${output_directory}/*_lin1_1.nii.gz; do
+    call_uploadsinglefile_with_URI_arguments=('call_uploadsinglefile_with_URI' ${URI_1} ${bounding_box_each_filename} ${resource_dirname})
+    outputfiles_present=$(/opt/conda/envs/deepreg/bin/python /software/download_with_session_ID.py "${call_uploadsinglefile_with_URI_arguments[@]}")
 
   done \
     < <(tail -n +2 "${dir_to_save}/${filename}")
@@ -930,17 +926,3 @@ resource_dirname="MASKS"
 done < <(tail -n +2 "${working_dir}/${output_csvfile}")
 
 #################################################################################################################################
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
