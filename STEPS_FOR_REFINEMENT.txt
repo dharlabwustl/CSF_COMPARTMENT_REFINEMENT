@@ -1,0 +1,7 @@
+We have template ct scan and a target ct scan
+we segment the ventricles of the template ct scan
+we segment the midline of the template ct scan
+we register the template ct scan to the target ct scan and get the transformation matrix
+we apply the same transformation matrix to the ventrilce mask and the midline mask
+Get the extent of the transformed ventricles with a bounding box
+apply that bounding box to get the upper part of the brain and also separate the ventricular from the sulcal csf

@@ -15,7 +15,7 @@ import argparse
 
 from xnatSession import XnatSession
 catalogXmlRegex = re.compile(r'.*\.xml$')
-XNAT_HOST_URL='https://snipr02.nrg.wustl.edu' #'https://snipr.wustl.edu'
+XNAT_HOST_URL=os.environ['XNAT_HOST'] # 'https://snipr02.nrg.wustl.edu' #'https://snipr.wustl.edu'
 XNAT_HOST = XNAT_HOST_URL # os.environ['XNAT_HOST'] #
 XNAT_USER = 'atulkumar' #os.environ['XNAT_USER']#
 XNAT_PASS ='Mrityor1!' #os.environ['XNAT_PASS'] #
